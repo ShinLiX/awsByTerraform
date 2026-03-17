@@ -1,0 +1,13 @@
+# Terraform state
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Terraform variables (sensitive)
+terraform.tfvars
+
+# Terraform plan output
+*.tfplan
+
+# Mac
+.DS_Store
