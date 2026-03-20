@@ -22,6 +22,12 @@ variable "root_volume_size" {
   default     = 30
 }
 
+variable "instance_count" {
+  description = "Number of EC2 instances to create"
+  type        = number
+  default     = 2
+}
+
 variable "my_ip_cidr" {
   description = "Your public IP in CIDR format, e.g. 1.2.3.4/32"
   type        = string

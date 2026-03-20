@@ -75,7 +75,7 @@ resource "aws_route_table_association" "public" {
 
 resource "aws_security_group" "ec2" {
   name        = "${var.project_name}-sg"
-  description = "Security group for CS5700 EC2 host"
+  description = "Security group for CS5700 EC2 hosts"
   vpc_id      = aws_vpc.this.id
 
   ingress {
@@ -84,6 +84,30 @@ resource "aws_security_group" "ec2" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = [var.my_ip_cidr]
+  }
+
+  ingress {
+    description = "UDP 12000 within VPC"
+    from_port   = 12000
+    to_port     = 12000
+    protocol    = "udp"
+    cidr_blocks = [aws_vpc.this.cidr_block]
+  }
+
+  ingress {
+    description = "UDP 13000 within VPC"
+    from_port   = 13000
+    to_port     = 13000
+    protocol    = "udp"
+    cidr_blocks = [aws_vpc.this.cidr_block]
+  }
+
+  ingress {
+    description = "Allow ICMP (ping)"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["10.57.0.0/16"]
   }
 
   egress {
@@ -109,6 +133,7 @@ resource "aws_key_pair" "this" {
 }
 
 resource "aws_instance" "this" {
+  count                       = var.instance_count
   ami                         = data.aws_ami.ubuntu_2204.id
   instance_type               = var.instance_type
   subnet_id                   = aws_subnet.public.id
@@ -125,6 +150,6 @@ resource "aws_instance" "this" {
   }
 
   tags = {
-    Name = "${var.project_name}-ec2"
+    Name = "${var.project_name}-ec2-${count.index + 1}"
   }
 }

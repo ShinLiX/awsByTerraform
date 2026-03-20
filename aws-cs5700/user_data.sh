@@ -11,7 +11,10 @@ apt-get install -y \
   git \
   unzip \
   net-tools \
-  ca-certificates
+  ca-certificates \
+  iproute2 \
+  python3 \
+  python3-pip
 
 systemctl enable docker
 systemctl start docker
@@ -25,6 +28,10 @@ echo "=== Docker version ==="
 docker --version || true
 echo "=== Docker Compose version ==="
 docker-compose --version || true
+echo "=== Python version ==="
+python3 --version || true
+echo "=== tc version/help ==="
+tc -h | head -n 1 || true
 EOF
 
 chmod +x /home/ubuntu/bootstrap-check.sh
